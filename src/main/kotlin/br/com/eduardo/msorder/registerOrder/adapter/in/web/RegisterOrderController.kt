@@ -2,7 +2,9 @@ package br.com.eduardo.msorder.registerOrder.adapter.`in`.web
 
 import br.com.eduardo.msorder.registerOrder.application.port.`in`.RegisterOrderUseCase
 import br.com.eduardo.msorder.registerOrder.model.request.RegisterOrderRequest
+import br.com.eduardo.msorder.registerOrder.model.response.OrderRegisteredResponse
 import org.slf4j.LoggerFactory
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.util.UriComponentsBuilder
@@ -21,12 +23,17 @@ class RegisterOrderController(
         @RequestHeader(required = false, name = "Tracer-id") tracerId: String?,
         @RequestBody request: RegisterOrderRequest,
         uriComponentsBuilder: UriComponentsBuilder
-    ): ResponseEntity<Any> {
+    ): ResponseEntity<OrderRegisteredResponse> {
         val tId = tracerId ?: UUID.randomUUID().toString()
 
         val order = registerOrderUseCase.execute(request, tId)
 
-        return ResponseEntity.ok().build()
+        val uri = uriComponentsBuilder.path("/orders/{id}").buildAndExpand(order.id).toUri()
+        return ResponseEntity.created(uri).body(
+            OrderRegisteredResponse(order.id!!, order.status)
+        ).also {
+            logger.info("action=registerOrder, status=${HttpStatus.CREATED}, tId=$tId")
+        }
     }
 
 }
