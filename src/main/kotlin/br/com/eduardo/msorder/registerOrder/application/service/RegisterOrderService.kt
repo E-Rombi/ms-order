@@ -32,7 +32,7 @@ class RegisterOrderService(
                     logger.info("action=orderCalculated, tId=$tId")
                 }
                 .also { order ->
-                    if (request.autoConfirmation) order.apply { status = OrderStatus.CONFIRMED }
+                    if (request.autoConfirmation) order.confirm()
                     logger.info("action=confirmationOrder, autoConfirmation=${request.autoConfirmation}, tId=$tId")
                 }
                 .also { order ->
