@@ -1,6 +1,8 @@
 package br.com.eduardo.msorder.registerOrder.adapter.out.web
 
+import br.com.eduardo.msorder.registerOrder.model.exception.ErrorMessage
 import br.com.eduardo.msorder.registerOrder.model.exception.FieldErrorMessage
+import br.com.eduardo.msorder.registerOrder.model.exception.ResourceNotFoundException
 import com.amazonaws.services.dynamodbv2.model.ConditionalCheckFailedException
 import org.hibernate.validator.internal.engine.path.PathImpl
 import org.slf4j.LoggerFactory
@@ -19,5 +21,10 @@ class ExceptionHandler {
         }
 
         return ResponseEntity.badRequest().body(response)
+    }
+
+    @ExceptionHandler
+    fun handleResourceNotFound(e: ResourceNotFoundException): ResponseEntity<ErrorMessage> {
+        return ResponseEntity.badRequest().body(ErrorMessage(e.message))
     }
 }
