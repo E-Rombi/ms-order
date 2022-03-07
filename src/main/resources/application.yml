@@ -1,4 +1,39 @@
-amazon:
+cloud:
   aws:
-    accesskey: ${AWS_ACCESSKEY}
-    secretkey: ${AWS_SECRETKEY}
+    stack:
+      auto: false
+    region:
+      auto: false
+      static: us-east-1
+    credentials:
+      use-default-aws-credentials-chain: true
+      accesskey: ${AWS_ACCESSKEY_ORDER}
+      secretkey: ${AWS_SECRETKEY_ORDER}
+
+messaging:
+  order:
+    source: "ms-order"
+    event-type:
+      order-confirmed:
+        topic: "order-confirmed_topic"
+        arn: "arn:aws:sns:us-east-1:656316374567:order-confirmed_topic"
+        queue:
+          separation: "order-confirmed-separation_queue"
+
+sqs:
+  auto-startup: true
+  polling-message-size: 5
+
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error
+
+clients:
+  ms-product:
+    name: ms-product
+    url: http://localhost:8081/products
+    routes:
+      findAllById: /search

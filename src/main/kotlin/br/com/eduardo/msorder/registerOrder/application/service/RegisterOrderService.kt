@@ -1,19 +1,29 @@
 package br.com.eduardo.msorder.registerOrder.application.service
 
+import br.com.eduardo.msorder.registerOrder.adapter.out.client.ProductClient
 import br.com.eduardo.msorder.registerOrder.application.port.`in`.RegisterOrderUseCase
+import br.com.eduardo.msorder.registerOrder.application.port.out.OrderConfirmationPublisherPort
 import br.com.eduardo.msorder.registerOrder.application.port.out.RegisterOrderPort
 import br.com.eduardo.msorder.registerOrder.model.Order
 import br.com.eduardo.msorder.registerOrder.model.OrderStatus
+import br.com.eduardo.msorder.registerOrder.model.exception.ResourceNotFoundException
+import br.com.eduardo.msorder.registerOrder.model.messaging.OrderConfirmedMessage
+import br.com.eduardo.msorder.registerOrder.model.request.FindAllProductsByIdRequest
 import br.com.eduardo.msorder.registerOrder.model.request.RegisterOrderRequest
+import feign.FeignException
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.validation.annotation.Validated
+import java.lang.RuntimeException
 import javax.validation.Valid
+import kotlin.math.log
 
 @Service
 @Validated
 class RegisterOrderService(
-    val registerOrderPort: RegisterOrderPort
+    val registerOrderPort: RegisterOrderPort,
+    val orderConfirmationPublisherPort: OrderConfirmationPublisherPort,
+    val productClient: ProductClient
 ) : RegisterOrderUseCase {
 
     private val logger = LoggerFactory.getLogger(RegisterOrderUseCase::class.java)
@@ -21,6 +31,20 @@ class RegisterOrderService(
     override fun execute(@Valid request: RegisterOrderRequest, tId: String): Order {
         with(request) {
             return toOrder()
+                .also {
+                    val ids = items.map { it.product.barcode }.toSet()
+                    try {
+                        val response = productClient.findAllById(FindAllProductsByIdRequest(ids), tId).body
+
+                        val others = ids.map { response?.ids?.contains(it) }
+
+                        if (others.contains(false))
+                            throw ResourceNotFoundException("Products not found")
+                    } catch (e: FeignException.FeignClientException) {
+                        logger.error("${e.message}", e)
+                        throw RuntimeException()
+                    }
+                }
                 .also { order ->
                     items.forEach { item ->
                         order.addItem(item)
@@ -40,8 +64,10 @@ class RegisterOrderService(
                     logger.info("action=orderSaved, tId=$tId")
                 }
                 .also { order ->
-                    if (order.status == OrderStatus.CONFIRMED) println("Cria mensagem no broker SNS")
-                    logger.info("action=messageSent, orderStatus=${order.status}, orderId=${order.id}, tId=$tId")
+                    if (order.status == OrderStatus.CONFIRMED)
+                        orderConfirmationPublisherPort.publish(OrderConfirmedMessage(order), tId).also {
+                            logger.info("action=messageSent, orderStatus=${order.status}, orderId=${order.id},tId=$tId")
+                        }
                 }
         }
 
