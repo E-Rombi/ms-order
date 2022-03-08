@@ -5,10 +5,10 @@ import br.com.eduardo.msorder.registerOrder.adapter.out.client.ProductClient
 import br.com.eduardo.msorder.registerOrder.application.port.`in`.RegisterOrderUseCase
 import br.com.eduardo.msorder.registerOrder.application.port.out.OrderConfirmationPublisherPort
 import br.com.eduardo.msorder.registerOrder.application.port.out.RegisterOrderPort
-import br.com.eduardo.msorder.registerOrder.model.Order
-import br.com.eduardo.msorder.registerOrder.model.OrderStatus
-import br.com.eduardo.msorder.registerOrder.model.exception.GenericException
-import br.com.eduardo.msorder.registerOrder.model.exception.ResourceNotFoundException
+import br.com.eduardo.msorder.shared.model.Order
+import br.com.eduardo.msorder.shared.model.OrderStatus
+import br.com.eduardo.msorder.shared.model.exception.GenericException
+import br.com.eduardo.msorder.shared.model.exception.ResourceNotFoundException
 import br.com.eduardo.msorder.registerOrder.model.messaging.OrderConfirmedMessage
 import br.com.eduardo.msorder.registerOrder.model.request.FindAllProductsByIdRequest
 import br.com.eduardo.msorder.registerOrder.model.request.RegisterOrderRequest
@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.validation.annotation.Validated
-import java.lang.RuntimeException
 import javax.validation.Valid
 
 @Service
@@ -35,6 +34,8 @@ class RegisterOrderService(
         with(request) {
             return toOrder()
                 .also {
+                    
+
                     try {
                         customerClient.validCustomer(customer.id, cId)
 

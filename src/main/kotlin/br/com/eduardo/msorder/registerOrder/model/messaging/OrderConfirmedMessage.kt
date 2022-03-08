@@ -1,9 +1,9 @@
 package br.com.eduardo.msorder.registerOrder.model.messaging
 
-import br.com.eduardo.msorder.registerOrder.model.Customer
-import br.com.eduardo.msorder.registerOrder.model.Item
-import br.com.eduardo.msorder.registerOrder.model.Order
-import br.com.eduardo.msorder.registerOrder.model.Product
+import br.com.eduardo.msorder.shared.model.Customer
+import br.com.eduardo.msorder.shared.model.Item
+import br.com.eduardo.msorder.shared.model.Order
+import br.com.eduardo.msorder.shared.model.Product
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDate

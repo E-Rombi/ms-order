@@ -1,6 +1,6 @@
 package br.com.eduardo.msorder.registerOrder.model.request
 
-import br.com.eduardo.msorder.registerOrder.model.*
+import br.com.eduardo.msorder.shared.model.*
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDate

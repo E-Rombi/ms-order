@@ -1,4 +1,4 @@
-package br.com.eduardo.msorder.registerOrder.model.messaging
+package br.com.eduardo.msorder.shared.model.messaging
 
 import java.time.Instant
 
