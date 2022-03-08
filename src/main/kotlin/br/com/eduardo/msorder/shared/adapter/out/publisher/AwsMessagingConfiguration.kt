@@ -1,8 +1,7 @@
-package br.com.eduardo.msorder.registerOrder.adapter.out.publisher
+package br.com.eduardo.msorder.shared.adapter.out.publisher
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider
 import com.amazonaws.auth.BasicAWSCredentials
-import com.amazonaws.client.builder.AwsClientBuilder
 import com.amazonaws.services.sns.AmazonSNSAsync
 import com.amazonaws.services.sns.AmazonSNSAsyncClientBuilder
 import com.amazonaws.services.sqs.AmazonSQSAsync

@@ -1,4 +1,4 @@
-package br.com.eduardo.msorder.registerOrder.model.exception
+package br.com.eduardo.msorder.shared.model.exception
 
 data class ErrorMessage(
     val message: String?

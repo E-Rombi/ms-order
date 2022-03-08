@@ -1,7 +1,7 @@
-package br.com.eduardo.msorder.registerOrder.adapter.out.publisher
+package br.com.eduardo.msorder.shared.adapter.out.publisher
 
 import br.com.eduardo.msorder.registerOrder.application.port.out.OrderConfirmationPublisherPort
-import br.com.eduardo.msorder.registerOrder.model.messaging.EventTemplate
+import br.com.eduardo.msorder.shared.model.messaging.EventTemplate
 import br.com.eduardo.msorder.registerOrder.model.messaging.OrderConfirmedMessage
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value

@@ -1,12 +1,10 @@
-package br.com.eduardo.msorder.registerOrder.adapter.out.web
+package br.com.eduardo.msorder.shared.adapter.out.web
 
-import br.com.eduardo.msorder.registerOrder.model.exception.ErrorMessage
-import br.com.eduardo.msorder.registerOrder.model.exception.FieldErrorMessage
-import br.com.eduardo.msorder.registerOrder.model.exception.GenericException
-import br.com.eduardo.msorder.registerOrder.model.exception.ResourceNotFoundException
-import com.amazonaws.services.dynamodbv2.model.ConditionalCheckFailedException
+import br.com.eduardo.msorder.shared.model.exception.ErrorMessage
+import br.com.eduardo.msorder.shared.model.exception.FieldErrorMessage
+import br.com.eduardo.msorder.shared.model.exception.GenericException
+import br.com.eduardo.msorder.shared.model.exception.ResourceNotFoundException
 import org.hibernate.validator.internal.engine.path.PathImpl
-import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -26,7 +24,7 @@ class ExceptionHandler {
 
     @ExceptionHandler
     fun handleResourceNotFound(e: ResourceNotFoundException): ResponseEntity<ErrorMessage> {
-        return ResponseEntity.badRequest().body(ErrorMessage(e.message))
+        return ResponseEntity.notFound().build()
     }
 
     @ExceptionHandler
