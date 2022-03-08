@@ -4,5 +4,5 @@ import br.com.eduardo.msorder.registerOrder.model.messaging.OrderConfirmedMessag
 
 interface OrderConfirmationPublisherPort {
 
-    fun publish(data: OrderConfirmedMessage, tId: String)
+    fun publish(data: OrderConfirmedMessage, cId: String)
 }

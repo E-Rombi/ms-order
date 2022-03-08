@@ -37,3 +37,8 @@ clients:
     url: http://localhost:8081/products
     routes:
       findAllById: /search
+  ms-customer:
+    name: ms-customer
+    url: http://localhost:8082/customers
+    routes:
+      validCustomer: /{customerId}/valid

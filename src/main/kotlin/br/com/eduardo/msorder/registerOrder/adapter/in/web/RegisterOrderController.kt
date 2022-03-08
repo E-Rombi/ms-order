@@ -20,19 +20,19 @@ class RegisterOrderController(
 
     @PostMapping
     fun registerOrder(
-        @RequestHeader(required = false, name = "Tracer-id") tracerId: String?,
+        @RequestHeader(required = false, name = "Correlation-id") correlationId: String?,
         @RequestBody request: RegisterOrderRequest,
         uriComponentsBuilder: UriComponentsBuilder
     ): ResponseEntity<OrderRegisteredResponse> {
-        val tId = tracerId ?: UUID.randomUUID().toString()
+        val cId = correlationId ?: UUID.randomUUID().toString()
 
-        val order = registerOrderUseCase.execute(request, tId)
+        val order = registerOrderUseCase.execute(request, cId)
 
         val uri = uriComponentsBuilder.path("/orders/{id}").buildAndExpand(order.id).toUri()
         return ResponseEntity.created(uri).body(
             OrderRegisteredResponse(order.id!!, order.status)
         ).also {
-            logger.info("action=registerOrder, status=${HttpStatus.CREATED}, tId=$tId")
+            logger.info("action=registerOrder, status=${HttpStatus.CREATED}, cId=$cId")
         }
     }
 

@@ -21,13 +21,13 @@ class OrderConfirmationPublisher(
 
     private val logger = LoggerFactory.getLogger(OrderConfirmationPublisherPort::class.java)
 
-    override fun publish(data: OrderConfirmedMessage, tId: String) {
+    override fun publish(data: OrderConfirmedMessage, cId: String) {
         try {
-            logger.info("action=orderConfirmedPublishing, topic=$topic, orderId=, tId=$tId")
+            logger.info("action=orderConfirmedPublishing, topic=$topic, orderId=, cId=$cId")
 
-            notificationMessagingTemplate.convertAndSend(topic, createEventTemplate(data, tId))
+            notificationMessagingTemplate.convertAndSend(topic, createEventTemplate(data, cId))
         } catch (e: MessagingException) {
-            logger.error("action=orderConfirmedPublishing, topic=$topic, tId=$tId")
+            logger.error("action=orderConfirmedPublishing, topic=$topic, cId=$cId")
         }
     }
 
